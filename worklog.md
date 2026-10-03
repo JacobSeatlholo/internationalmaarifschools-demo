@@ -33,3 +33,20 @@ Stage Summary:
 - Full Next.js 16 + TS + Tailwind 4 + shadcn + Prisma(SQLite) + socket.io ecosystem delivered
 - All three cohorts (public/portal/ERP) functional with browser-verified golden paths
 - Preview: via preview panel; chat service must run (mini-services/chat-service: bun run dev)
+
+---
+Task ID: 3
+Agent: Super Z (main agent)
+Task: Push project to github.com:JacobSeatlholo/internationalmaarifschools-demo (SSH key setup)
+
+Work Log:
+- SSH key id_ed25519_github already generated (jacob-seatlholo-maarif-demo-2026-10-03); user added pubkey to GitHub
+- Container lacked ssh binary + no sudo; solved via `apt-get download openssh-client` + dpkg -x to /home/z/ssh-local/ (OpenSSH 10.0p2)
+- Port 22 blocked -> switched ~/.ssh/config to ssh.github.com:443 (ConnectTimeout 15)
+- Verified auth: "Hi JacobSeatlholo/internationalmaarifschools-demo! You've successfully authenticated"
+- Pushed main (3e064be) -> origin/main; 205 tracked files, node_modules excluded, 99 files under src/ + prisma/
+- Persisted `git config core.sshCommand "/home/z/ssh-local/usr/bin/ssh"` so future push/pull need no env var
+
+Stage Summary:
+- Repo live at github.com:JacobSeatlholo/internationalmaarifschools-demo (main, up to date)
+- Future pushes in this env: plain `git push` works (core.sshCommand configured)
