@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../db/custom.db"
+}
+
+// ────────────────────────────────────────────────
+// ADMISSIONS PIPELINE
+// ────────────────────────────────────────────────
+model Application {
+  id           String   @id @default(cuid())
+  trackingCode String   @unique
+  studentFirst String
+  studentLast  String
+  dob          String
+  grade        String
+  pathway      String   // CAPS | CAMBRIDGE | DUAL
+  guardianFirst String
+  guardianLast String
+  email        String
+  phone        String
+  startTerm    String
+  heardFrom    String?
+  status       String   @default("SUBMITTED") // SUBMITTED | ASSESSMENT | INTERVIEW | REGISTERED
+  createdAt    DateTime @default(now())
+}
+
+// ────────────────────────────────────────────────
+// FINANCIAL CONTROL HUB
+// ────────────────────────────────────────────────
+model Student {
+  id            String  @id @default(cuid())
+  firstName     String
+  lastName      String
+  grade         String
+  className     String
+  pathway       String  // CAPS | CAMBRIDGE | DUAL
+  guardianName  String
+  guardianPhone String
+  guardianEmail String
+  feeAccount    FeeAccount?
+}
+
+model FeeAccount {
+  id           String   @id @default(cuid())
+  studentId    String   @unique
+  student      Student  @relation(fields: [studentId], references: [id])
+  annualTuition Float
+  paidToDate   Float    @default(0)
+  planType     String   @default("ANNUAL") // ANNUAL | MONTHLY_11 | PER_TERM_4
+  status       String   @default("PARTIALLY_PAID") // FULLY_PAID | PARTIALLY_PAID | IN_ARREARS
+  arrearsDays  Int      @default(0)
+  lastPaymentAt DateTime?
+  payments     Payment[]
+}
+
+model Payment {
+  id           String   @id @default(cuid())
+  feeAccountId String
+  feeAccount   FeeAccount @relation(fields: [feeAccountId], references: [id])
+  amount       Float
+  method       String   // EFT | CARD | CASH | SNAPSCAN
+  reference    String
+  createdAt    DateTime @default(now())
+}
+
+// OCR receipt / purchase-order processing
+model Receipt {
+  id           String   @id @default(cuid())
+  fileName     String
+  merchant     String?
+  vatNumber    String?
+  category     String   // FACILITIES | ACADEMIC | IT | TRANSPORT | CANTEEN | MISC
+  amount       Float
+  documentDate String
+  tier         String   // AUTO (<R5,000) | EXECUTIVE (>=R5,000)
+  status       String   @default("PENDING_APPROVAL") // AUTO_LOGGED | PENDING_APPROVAL | APPROVED | REJECTED
+  ocrConfidence Float   @default(0.92)
+  rawText      String?
+  extractedJson String?
+  approvedBy   String?
+  createdAt    DateTime @default(now())
+}
+
+// ────────────────────────────────────────────────
+// HR — TEACHER LEAVE ENGINE (BCEA)
+// ────────────────────────────────────────────────
+model Staff {
+  id           String  @id @default(cuid())
+  name         String
+  role         String  // PRINCIPAL | BURSAR | EXECUTIVE | DEPT_HEAD | TEACHER
+  department   String  // MATHEMATICS | SCIENCES | LANGUAGES | HUMANITIES | ADMIN | SPORT
+  email        String
+  phone        String?
+  hpcsaNumber  String?
+  subjects     String  // JSON array of subject names
+  joinedAt     DateTime @default("2024-01-15T00:00:00.000Z")
+  leaveBalances LeaveBalance[]
+  leaveRequests LeaveRequest[]
+  timetable    TimetableEntry[]
+}
+
+model LeaveBalance {
+  id              String @id @default(cuid())
+  staffId         String
+  staff           Staff  @relation(fields: [staffId], references: [id])
+  cycleStart      String // e.g. "2026-01-01"
+  annualEntitlement Float @default(15)  // 21 consecutive days ≈ 15 working days (5-day week)
+  annualTaken     Float  @default(0)
+  sickEntitlement Float  @default(30)   // 36-month cycle: 6 weeks of workdays
+  sickTaken       Float  @default(0)
+  familyEntitlement Float @default(3)  // BCEA s27: 3 days per annual cycle
+  familyTaken     Float  @default(0)
+  studyEntitlement Float @default(5)   // per contract
+  studyTaken      Float  @default(0)
+}
+
+model LeaveRequest {
+  id          String  @id @default(cuid())
+  staffId     String
+  staff       Staff   @relation(fields: [staffId], references: [id])
+  type        String  // ANNUAL | SICK | STUDY | FAMILY
+  startDate   String
+  endDate     String
+  workingDays Float
+  reason      String?
+  status      String  @default("PENDING") // PENDING | APPROVED | REJECTED
+  doctorNoteId String? @unique
+  doctorNote  DoctorNote? @relation(fields: [doctorNoteId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model DoctorNote {
+  id            String  @id @default(cuid())
+  fileName      String
+  doctorName    String?
+  practiceNumber String?
+  issuedDate    String?
+  unfitFrom     String?
+  unfitTo       String?
+  diagnosis     String?
+  hpcsaValid    Boolean @default(false)
+  anomaly       String? // explanation when flagged
+  ocrText       String?
+  ocrConfidence Float   @default(0.9)
+  createdAt     DateTime @default(now())
+  leaveRequest  LeaveRequest[]
+}
+
+// ────────────────────────────────────────────────
+// TIMETABLE & SUBSTITUTE DISPATCH
+// ────────────────────────────────────────────────
+model TimetableEntry {
+  id        String @id @default(cuid())
+  staffId   String
+  staff     Staff  @relation(fields: [staffId], references: [id])
+  day       Int    // 1=Mon … 5=Fri
+  period    Int    // 1..8
+  subject   String
+  gradeClass String
+}
+
+model SubstituteDispatch {
+  id           String  @id @default(cuid())
+  leaveId      String
+  absentStaffId String
+  substituteId String?
+  day          Int
+  period       Int
+  subject      String
+  gradeClass   String
+  lessonPlan   String?
+  status       String  @default("PENDING") // PENDING | ACCEPTED | DECLINED
+  createdAt    DateTime @default(now())
+}
+
+// ────────────────────────────────────────────────
+// MEETING SCHEDULER
+// ────────────────────────────────────────────────
+model Meeting {
+  id           String  @id @default(cuid())
+  type         String  // PARENT_TEACHER | EXECUTIVE
+  guardianName String?
+  staffId      String?
+  staffName    String?
+  topic        String
+  scheduledAt  String  // ISO datetime
+  durationMin  Int     @default(10)
+  meetLink     String?
+  room         String?
+  attachment   String?
+  status       String  @default("CONFIRMED") // CONFIRMED | COMPLETED | CANCELLED
+  createdAt    DateTime @default(now())
+}
+
+// ────────────────────────────────────────────────
+// TASK & SLA COMMAND CENTER
+// ────────────────────────────────────────────────
+model Task {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  tag         String  // FACILITIES | CURRICULUM | EVENTS | HR | FINANCIAL_AUDIT
+  column      String  @default("TODO") // TODO | IN_PROGRESS | EXEC_REVIEW | DONE
+  assignee    String
+  priority    String  @default("MEDIUM") // LOW | MEDIUM | HIGH | CRITICAL
+  slaDueAt    String
+  escalated   Boolean @default(false)
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+}
+
+// ────────────────────────────────────────────────
+// INTERNAL COMMS — EXECUTIVE DIRECTIVES
+// ────────────────────────────────────────────────
+model Directive {
+  id          String  @id @default(cuid())
+  title       String
+  body        String
+  authorRole  String
+  requiresSignOff Boolean @default(true)
+  createdAt   DateTime @default(now())
+  signOffs    DirectiveSignOff[]
+}
+
+model DirectiveSignOff {
+  id          String   @id @default(cuid())
+  directiveId String
+  directive   Directive @relation(fields: [directiveId], references: [id])
+  staffName   String
+  role        String
+  signedAt    DateTime @default(now())
+  @@unique([directiveId, staffName])
+}
+
+// ────────────────────────────────────────────────
+// PARENT / STUDENT PORTAL
+// ────────────────────────────────────────────────
+model AcademicRecord {
+  id         String @id @default(cuid())
+  studentId  String
+  term       String // T1 2026 … T4 2026
+  subject    String
+  curriculum String // CAPS | CAMBRIDGE
+  mark       Float
+  comment    String?
+}
+
+model ShowcaseProject {
+  id          String @id @default(cuid())
+  studentName String
+  grade       String
+  title       String
+  subject     String
+  description String
+  likes       Int    @default(0)
+  createdAt   DateTime @default(now())
+}
