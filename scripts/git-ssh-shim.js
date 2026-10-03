@@ -29,6 +29,9 @@ if (!host || cmdArgs.length === 0) {
   process.exit(1);
 }
 const command = cmdArgs.join(" ");
+// git passes "user@host" — strip the user part (we always authenticate as git)
+const at = host.lastIndexOf("@");
+if (at !== -1) host = host.slice(at + 1);
 
 const keyPath = join(homedir(), ".ssh", "id_ed25519_github");
 let key;
