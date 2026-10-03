@@ -49,6 +49,8 @@ export const metadata: Metadata = {
     description:
       "Academic rigour meets character development in the Mother City. CAPS & Cambridge pathways, STREAM labs, global network.",
     locale: "en_ZA",
+    alternateLocale: ["af_ZA", "xh_ZA"], // Western Cape trilingual (EN/AF/XH)
+    images: [{ url: "/images/site/hero-main.jpg", width: 1600, height: 1004, alt: "IMS Cape Town campus" }],
   },
   twitter: {
     card: "summary_large_image",

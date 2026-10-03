@@ -1,10 +1,12 @@
 "use client";
 
 import { PROOF_STATS, TESTIMONIALS, ACCREDITATIONS } from "@/lib/school-data";
+import { useT } from "@/store/lang-store";
 import { Badge } from "@/components/ui/badge";
 import { Quote, ShieldCheck, Star } from "lucide-react";
 
 export function Proof() {
+  const t = useT();
   return (
     <section className="relative bg-navy-deep py-20 text-white" id="proof">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -45,7 +47,7 @@ export function Proof() {
         {/* Accreditations */}
         <div className="mt-14">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-soft">
-            <ShieldCheck className="h-4 w-4" /> Registrations & quality assurance
+            <ShieldCheck className="h-4 w-4" /> {t("proof.registrations")}
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {ACCREDITATIONS.map((a) => (

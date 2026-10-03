@@ -25,8 +25,8 @@ export const SCHOOL = {
   phone: "+27 21 300 7527",
   phoneDisplay: "021 300 7527",
   email: "capetown@internationalmaarifschools.co.za",
-  geo: { lat: -33.9818, lng: 18.4706 },
-  foundingYear: 2024,
+  geo: { lat: -33.984316, lng: 18.471414 },
+  foundingYear: 2023,
   grades: "8–12",
   openingHours: "07:40 – 15:15 (Mon–Fri)",
 } as const;

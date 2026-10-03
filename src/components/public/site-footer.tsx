@@ -1,10 +1,12 @@
 "use client";
 
 import { SCHOOL } from "@/lib/site";
+import { useT } from "@/store/lang-store";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Twitter, ShieldCheck } from "lucide-react";
 
 export function SiteFooter() {
   const year = new Date().getFullYear(); // P0 repair: copyright always current
+  const t = useT();
   return (
     <footer className="bg-navy-deep text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
@@ -18,8 +20,7 @@ export function SiteFooter() {
               </div>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
-              Part of the Turkish Maarif Foundation&apos;s global network — 55 countries, 500+ schools,
-              one standard of excellence. Building futures through education in the Mother City.
+              {t("footer.blurb")}
             </p>
             <div className="mt-5 flex gap-2">
               {[Facebook, Instagram, Twitter].map((Icon, i) => (
@@ -36,7 +37,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-soft">Visit us</h4>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-soft">{t("footer.visit")}</h4>
             <ul className="mt-4 space-y-3 text-sm text-white/75">
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
@@ -58,7 +59,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-soft">Quick links</h4>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-soft">{t("footer.links")}</h4>
             <ul className="mt-4 space-y-2.5 text-sm text-white/75">
               <li><a href="#stem" className="hover:text-gold">3D STEM Lab</a></li>
               <li><a href="#pathways" className="hover:text-gold">CAPS & Cambridge Pathways</a></li>
@@ -71,10 +72,10 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-[11px] text-white/45 sm:flex-row">
-          <span>© {year} {SCHOOL.name}. All rights reserved.</span>
+          <span>© {year} {SCHOOL.name}. {t("footer.rights")}</span>
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-brand" />
-            WCED registered · POPIA compliant · Safer recruitment certified
+            {t("footer.compliance")}
           </span>
         </div>
       </div>

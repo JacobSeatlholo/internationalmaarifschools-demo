@@ -144,10 +144,10 @@ export const UNIVERSITY_PATHS = [
 ];
 
 export const PROOF_STATS = [
+  { value: "55", label: "Countries in Maarif network", sub: "68,778+ students · 500+ schools" },
+  { value: "2024", label: "Opened in Claremont", sub: "Established 2023 · First Matric class Dec 2026" },
+  { value: "1:14", label: "Teacher-to-learner ratio", sub: "Small-class guarantee" },
   { value: "100%", label: "Cambridge pass rate", sub: "2025 IGCSE cohort" },
-  { value: "1:14", label: "Teacher-to-learner ratio", sub: "Verified small classes" },
-  { value: "2", label: "Curriculum pathways", sub: "CAPS + Cambridge International" },
-  { value: "55", label: "Countries in Maarif network", sub: "Turkish Maarif Foundation" },
 ];
 
 export const TESTIMONIALS = [
@@ -176,3 +176,61 @@ export const ACCREDITATIONS = [
   { name: "Turkish Maarif Foundation", detail: "Part of a 55-country, 500-school global education network" },
   { name: "HPCSA-Verified Wellness", detail: "School counsellor and medical certificate verification protocols" },
 ];
+
+/* ═══════════════ REAL CONTENT — internationalmaarifschools.co.za ═══════════════
+ * Copy below is the school's own published text (About Us, Principal's Message,
+ * Manager's Message, 2026 School Terms, Payment Policy, Foundation stats).
+ * Only the stale early-payment year was corrected (2025 → 2026).            */
+
+export const FOUNDATION_STATS = {
+  countries: 55,
+  students: "68,778+",
+  schools: "500+",
+  blurb:
+    "The Turkish Maarif Foundation stands as one of the world's most remarkable educational movements — a global network serving over 68,778 students through more than 500 educational institutions in 55 countries.",
+} as const;
+
+export const ABOUT_TEXT = [
+  "Welcome to International Maarif School Cape Town High School — where academic excellence meets character development in one of South Africa's most beautiful settings. Established in 2023 as part of the prestigious Turkish Maarif Foundation's global network, our school brings world-class educational standards to the Mother City.",
+  "Education at IMS Cape Town extends far beyond textbooks and examinations. While we maintain an unwavering commitment to academic rigour, we understand that true education shapes the whole person. Our learners don't just memorise facts — they develop critical thinking abilities, cultivate intellectual curiosity, and build the character traits that will serve them throughout their lives.",
+  "At IMS Cape Town, we believe that every student carries within them the potential for greatness. Our role is to nurture that potential through rigorous academics, meaningful experiences, and a supportive community that celebrates both achievement and growth.",
+] as const;
+
+export const LEADERSHIP_MESSAGES = [
+  {
+    key: "principal",
+    name: "Mrs Allen",
+    role: "Principal, IMS Cape Town High School",
+    initials: "MA",
+    short:
+      "It fills me with immense pride to welcome you to IMS Cape Town — a secular, co-educational school that has rapidly established itself as one of the most exciting independent schools in the Mother City. Since our official opening in January 2024, we have been on an extraordinary journey.",
+    text:
+      "It fills me with immense pride to welcome you to IMS Cape Town — a secular, co-educational school that has rapidly established itself as one of the most exciting independent schools in the Mother City. Since our official opening in January 2024, we have been on an extraordinary journey, and I am thrilled to share that journey with you. We offer Grades 8–12, and we are eagerly counting down to December when we will proudly produce our very first class of Grade 12 Matriculants — a milestone that will mark the culmination of our founding vision and the beginning of countless success stories. Nestled in the leafy suburb of Claremont, with breathtaking views of the mountains that inspire us daily, our campus offers the perfect setting for academic excellence. Our fully equipped, modern classrooms create an environment where learning comes alive, and our commitment to small class sizes ensures that every student receives the individualised attention, affection, and advancement opportunities they deserve. Our educational programme is fully aligned with the South African CAPS Curriculum, and we are proudly registered with the Western Cape Education Department. Our comprehensive Wellness Programme ensures that every learner has the support they need to thrive. Our school is a happy place where students flourish, where challenges are embraced as opportunities, and where every achievement — big or small — is celebrated.",
+  },
+  {
+    key: "manager",
+    name: "Ramazan Aydin",
+    role: "School Manager, IMS Cape Town",
+    initials: "RA",
+    short:
+      "On behalf of the Turkish Maarif Foundation, I extend our warmest greetings to you. From Asia to the Americas, from Europe to Africa — we are honoured and deeply proud to be here in Cape Town, making a meaningful contribution to the future of our students.",
+    text:
+      "On behalf of the Turkish Maarif Foundation, I extend our warmest greetings to you. Just as we are present in many parts of the world — from Asia to the Americas, from Europe to Africa — we are honoured and deeply proud to be here in Cape Town, making a meaningful contribution to the future of our students and serving as a bridge in their relationships with Türkiye. Our Foundation is built on a profound commitment: to raise individuals equipped with the knowledge and skills demanded by our modern age, who can think critically and analytically, and who have internalised the moral, cultural, and human values that make for good global citizens. As part of the Turkish Maarif Foundation's worldwide network, IMS Cape Town combines international educational standards with a deep respect for South African culture and values. We believe that the best education honours both local heritage and global perspective. I warmly invite you to join us on this meaningful journey — to move forward together, and to shape the future of our children. The partnership between families, educators, and our Foundation is what makes extraordinary education possible. Together, we can achieve great things.",
+  },
+] as const;
+
+export const SCHOOL_TERMS_2026 = [
+  { term: "Term 1", dates: "14 January – 27 March" },
+  { term: "Term 2", dates: "8 April – 26 June" },
+  { term: "Term 3", dates: "21 July – 18 September" },
+  { term: "Term 4", dates: "6 October – 9 December" },
+] as const;
+
+export const PAYMENT_POLICY = {
+  applicationFee: "R250",
+  administrationFee: "R2,500",
+  paymentOptions: ["1× Annual", "11× Monthly", "4× Per Term"],
+  earlyDiscount: "5% off annual tuition when paid in full before 31 January 2026.",
+  textbooks: "Provided on loan at no additional cost. Lost or defaced books will be billed.",
+  stationery: "Issued towards year-end. Parents will be billed based on supplier pricing.",
+} as const;
